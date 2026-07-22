@@ -12,7 +12,7 @@ Fonctionne hors ligne, s'installe sur mobile, génère deux PDF.
 | `index.html` | L'application complète (HTML + CSS + JS + logo intégré) |
 | `jspdf.umd.min.js` | Génération des PDF, en local (repli CDN automatique) |
 | `manifest.json` | Déclaration PWA (nom, icônes, couleurs) |
-| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v6` |
+| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v8` |
 | `icon-192.png` | Icône application 192 px |
 | `icon-512.png` | Icône application 512 px |
 
@@ -41,10 +41,55 @@ Les 6 fichiers doivent rester **dans le même dossier**, à plat.
 À **chaque** nouveau déploiement, incrémenter la version du cache dans `service-worker.js` :
 
 ```js
-const CACHE = 'modex2-v6';   // -> 'modex2-v7', puis 'modex2-v8', etc.
+const CACHE = 'modex2-v8';   // -> 'modex2-v9', puis 'modex2-v10', etc.
 ```
 
 Sans cela, les téléphones qui ont déjà installé l'app continueront d'afficher l'ancienne version.
+
+---
+
+## Accès et mot de passe
+
+L'app s'ouvre sur un écran de verrouillage. Le mot de passe est **transmis séparément**
+(volontairement absent de ce fichier et du code : seule son empreinte SHA-256 figure
+dans `index.html`). La case « Rester connecté sur cet appareil » évite de le retaper à
+chaque ouverture ; sans elle, il est redemandé à la fermeture du navigateur.
+
+### Changer le mot de passe
+Le mot de passe n'est pas stocké en clair : seule son empreinte SHA-256 figure dans `index.html`.
+1. Ouvrir l'app, puis la console du navigateur (F12 → Console).
+2. Coller : `await sha256('MonNouveauMotDePasse')`
+3. Copier la chaîne affichée et remplacer la valeur de `PIN_HASH` en haut du `<script>` :
+   ```js
+   const PIN_HASH='...la nouvelle empreinte...';
+   ```
+4. Redéployer en incrémentant le cache du service worker.
+
+### Ce que cette protection vaut réellement
+
+> **Important.** Il s'agit d'une protection **côté navigateur**. Elle empêche un collègue,
+> un client ou quelqu'un qui tombe sur le lien d'accéder à l'app et de voir les tarifs.
+> Elle **ne résiste pas** à une personne qui sait afficher le code source de la page :
+> tout le contenu (grille, prix sous-traitants) est téléchargé par le navigateur avant
+> la saisie du mot de passe.
+>
+> L'app contenant les **prix payés aux sous-traitants et les taux de marge**, si la
+> confidentialité commerciale est un vrai enjeu, il faut une protection côté serveur.
+
+### Vraie protection (recommandé) — Cloudflare Access
+
+Gratuit jusqu'à 50 utilisateurs, et le contenu n'est jamais servi sans authentification :
+
+1. Héberger l'app sur **Cloudflare Pages** au lieu de GitHub Pages
+   (connexion directe au dépôt GitHub, déploiement automatique).
+2. Dans le tableau de bord Cloudflare : **Zero Trust → Access → Applications → Add an application**
+   → Self-hosted, et indiquer le domaine du site.
+3. Créer une politique : autoriser une liste d'e-mails précis, ou tout le domaine
+   `@loxam-module.com`.
+4. À l'ouverture du lien, Cloudflare demande l'e-mail et envoie un code à usage unique.
+
+Autre variante : dépôt **privé** + GitHub Pages privé, mais cela nécessite
+un compte GitHub Enterprise Cloud.
 
 ---
 

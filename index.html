@@ -138,7 +138,7 @@
     <label class="f"><span class="lb">Client</span><input id="client" placeholder="Ex : Entreprise CRPS — Région SUD"></label>
     <label class="f"><span class="lb">Sous-titre (module / chantier)</span><input id="soustitre" placeholder="Ex : Lycée Benoit"></label>
     <label class="f"><span class="lb">Sous-traitant</span>
-      <select id="soustraitant" onchange="onST()"></select>
+      <select id="soustraitant" onchange="onST()" autocomplete="off"></select>
     </label>
     <label class="f" id="stAutreWrap" style="display:none"><span class="lb">Nom du sous-traitant</span>
       <input id="stAutre" placeholder="Saisir le nom du sous-traitant"></label>
@@ -162,13 +162,13 @@
     <h2>Tarif et marge</h2>
     <div class="grid2">
       <label class="f"><span class="lb">Tarif</span>
-        <select id="tarif" onchange="recalc()">
+        <select id="tarif" onchange="recalc()" autocomplete="off">
           <option value="1">Tarif jour</option>
           <option value="1.6">Tarif de nuit (×1,6)</option>
         </select>
       </label>
       <label class="f"><span class="lb">Marge</span>
-        <select id="marge" onchange="recalc()">
+        <select id="marge" onchange="recalc()" autocomplete="off">
           <option value="1">Sans marge (×1,00)</option>
           <option value="1.1" selected>×1,10</option>
           <option value="1.2">×1,20</option>
@@ -182,7 +182,7 @@
 
   <div class="recap">
     <div class="rline"><span class="k">Déboursé sous-traitant</span><span class="v" id="totalCost">0,00 €</span></div>
-    <div class="rline gain"><span class="k">Marge dégagée</span><span class="v" id="totalMarge">0,00 €</span></div>
+    <div class="rline gain"><span class="k">Marge dégagée <b id="margeLbl" style="color:var(--red)">×1,10</b></span><span class="v" id="totalMarge">0,00 €</span></div>
     <div class="totalcard"><span class="lab">Total HT devis</span><span class="val" id="totalHT">0,00 €</span></div>
   </div>
 
@@ -257,6 +257,10 @@ const GRILLE={
     ["Montage au ring / Élinguage",20.00],["Pose garde-corps",15.00],["Soudure platines modules",15.00],
     ["Raccordement EU / ml",23.00],["Raccordement EV / ml",24.00],
     ["Pose rampe PMR",150.00],["Pose passerelles",52.00],["Échelle à crinoline",300.00],["Pose haut-vent",50.00],
+  ],
+  "Assemblage":[
+    ["Salle double",166.20],
+    ["Salle triple",272.10],
   ],
   "Raccordement électrique":[
     ["Raccordement des boîtes des modules vers TGBT en RDC",120.00],
@@ -338,6 +342,8 @@ function recalc(){
   document.getElementById('totalCost').innerHTML=fmt(cost);
   document.getElementById('totalMarge').innerHTML=fmt(cli-cost);
   document.getElementById('totalHT').innerHTML=fmt(cli);
+  const lbl=document.getElementById('margeLbl');
+  if(lbl) lbl.textContent = km>1 ? '\u00D7'+km.toFixed(2).replace('.',',') : 'sans marge';
 }
 
 function resetAll(){
@@ -362,9 +368,25 @@ function loadState(){
   }catch(e){ return false; }
 }
 
+const DEFAULT_MARGE='1.1', DEFAULT_TARIF='1';
+/* Les navigateurs restaurent l'ancienne sélection des <select> au rechargement et
+   ignorent l'attribut "selected" : on réapplique donc explicitement les valeurs. */
+function applyDefaults(){
+  const m=document.getElementById('marge'), t=document.getElementById('tarif');
+  const ok=el2=>[...el2.options].some(o=>o.value===el2.value);
+  if(!m.value||!ok(m)) m.value=DEFAULT_MARGE;
+  if(!t.value||!ok(t)) t.value=DEFAULT_TARIF;
+}
+
 buildST();
 seed();
-if(!loadState()){ document.getElementById('date').value=new Date().toISOString().slice(0,10); }
+const restored=loadState();
+if(!restored){
+  document.getElementById('date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('marge').value=DEFAULT_MARGE;
+  document.getElementById('tarif').value=DEFAULT_TARIF;
+}
+applyDefaults();
 onST();
 render();
 

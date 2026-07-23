@@ -169,8 +169,8 @@
       </label>
       <label class="f"><span class="lb">Marge</span>
         <select id="marge" onchange="recalc()" autocomplete="off">
-          <option value="1">Sans marge (×1,00)</option>
-          <option value="1.1" selected>×1,10</option>
+          <option value="1" selected>Sans marge (×1,00)</option>
+          <option value="1.1">×1,10</option>
           <option value="1.2">×1,20</option>
           <option value="1.3">×1,30</option>
           <option value="1.4">×1,40</option>
@@ -368,7 +368,7 @@ function loadState(){
   }catch(e){ return false; }
 }
 
-const DEFAULT_MARGE='1.1', DEFAULT_TARIF='1';
+const DEFAULT_MARGE='1', DEFAULT_TARIF='1';   /* ouverture toujours sans marge */
 /* Les navigateurs restaurent l'ancienne sélection des <select> au rechargement et
    ignorent l'attribut "selected" : on réapplique donc explicitement les valeurs. */
 function applyDefaults(){
@@ -383,9 +383,11 @@ seed();
 const restored=loadState();
 if(!restored){
   document.getElementById('date').value=new Date().toISOString().slice(0,10);
-  document.getElementById('marge').value=DEFAULT_MARGE;
   document.getElementById('tarif').value=DEFAULT_TARIF;
 }
+/* la marge repart systématiquement sur "sans marge" à l'ouverture,
+   y compris après restauration d'un chiffrage enregistré */
+document.getElementById('marge').value=DEFAULT_MARGE;
 applyDefaults();
 onST();
 render();

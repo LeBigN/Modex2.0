@@ -12,7 +12,7 @@ Fonctionne hors ligne, s'installe sur mobile, génère deux PDF.
 | `index.html` | L'application complète (HTML + CSS + JS + logo intégré) |
 | `jspdf.umd.min.js` | Génération des PDF, en local (repli CDN automatique) |
 | `manifest.json` | Déclaration PWA (nom, icônes, couleurs) |
-| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v10` |
+| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v11` |
 | `icon-192.png` | Icône application 192 px |
 | `icon-512.png` | Icône application 512 px |
 
@@ -41,7 +41,7 @@ Les 6 fichiers doivent rester **dans le même dossier**, à plat.
 À **chaque** nouveau déploiement, incrémenter la version du cache dans `service-worker.js` :
 
 ```js
-const CACHE = 'modex2-v10';   // -> 'modex2-v11', puis 'modex2-v12', etc.
+const CACHE = 'modex2-v11';   // -> 'modex2-v12', puis 'modex2-v13', etc.
 ```
 
 Sans cela, les téléphones qui ont déjà installé l'app continueront d'afficher l'ancienne version.
@@ -103,6 +103,9 @@ un compte GitHub Enterprise Cloud.
    restent modifiables ligne par ligne. `+ Ligne libre` pour une prestation hors grille.
    **Seules les lignes avec un Nb > 0 partent sur les PDF.**
 4. **Tarif et marge** — tarif jour ou nuit (×1,6), puis marge de ×1,10 à ×1,50.
+   **L'app s'ouvre toujours sur « Sans marge »**, y compris après restauration d'un
+   chiffrage enregistré : la marge doit être sélectionnée volontairement à chaque devis.
+   Le coefficient appliqué est rappelé en rouge à côté de « Marge dégagée ».
 
 ### Logique de calcul
 

@@ -1,6 +1,6 @@
 /* Modex 2.0 — service worker
    IMPORTANT : incrémenter CACHE à chaque déploiement pour forcer la MAJ PWA */
-const CACHE = 'modex2-v11';
+const CACHE = 'modex2-v13';
 const ASSETS = [
   './',
   './index.html',

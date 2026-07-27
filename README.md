@@ -12,7 +12,7 @@ Fonctionne hors ligne, s'installe sur mobile, génère deux PDF.
 | `index.html` | L'application complète (HTML + CSS + JS + logo intégré) |
 | `jspdf.umd.min.js` | Génération des PDF, en local (repli CDN automatique) |
 | `manifest.json` | Déclaration PWA (nom, icônes, couleurs) |
-| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v11` |
+| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v13` |
 | `icon-192.png` | Icône application 192 px |
 | `icon-512.png` | Icône application 512 px |
 
@@ -41,7 +41,7 @@ Les 6 fichiers doivent rester **dans le même dossier**, à plat.
 À **chaque** nouveau déploiement, incrémenter la version du cache dans `service-worker.js` :
 
 ```js
-const CACHE = 'modex2-v11';   // -> 'modex2-v12', puis 'modex2-v13', etc.
+const CACHE = 'modex2-v13';   // -> 'modex2-v14', puis 'modex2-v15', etc.
 ```
 
 Sans cela, les téléphones qui ont déjà installé l'app continueront d'afficher l'ancienne version.
@@ -97,8 +97,12 @@ un compte GitHub Enterprise Cloud.
 
 1. **Informations** — numéro, date, client, chantier / module, sous-traitant.
 2. **Descriptif** — texte libre (optionnel), repris sur le devis.
-3. **Grille de chiffrage** — toute la grille tarifaire est affichée sous forme de tableau,
-   en quatre sections : Montage / Assemblage / Raccordement électrique / Démontage.
+3. **Grille de chiffrage** — deux cases à cocher **Montage** et **Démontage** en tête
+   affichent ou masquent les sections concernées :
+   *Montage* = Montage + Assemblage + Raccordement électrique ; *Démontage* = Démontage.
+   **Aucune case n'est cochée à l'ouverture** : on choisit à chaque devis.
+   Une section masquée est retirée des totaux et des PDF.
+   La grille tarifaire s'affiche en tableau ; les sections visibles dépendent des cases cochées.
    Il suffit de saisir le **Nb** en face des prestations concernées ; les prix unitaires
    restent modifiables ligne par ligne. `+ Ligne libre` pour une prestation hors grille.
    **Seules les lignes avec un Nb > 0 partent sur les PDF.**

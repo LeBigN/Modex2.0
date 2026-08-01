@@ -12,7 +12,7 @@ Fonctionne hors ligne, s'installe sur mobile, génère deux PDF.
 | `index.html` | L'application complète (HTML + CSS + JS + logo intégré) |
 | `jspdf.umd.min.js` | Génération des PDF, en local (repli CDN automatique) |
 | `manifest.json` | Déclaration PWA (nom, icônes, couleurs) |
-| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v13` |
+| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v14` |
 | `icon-192.png` | Icône application 192 px |
 | `icon-512.png` | Icône application 512 px |
 
@@ -41,7 +41,7 @@ Les 6 fichiers doivent rester **dans le même dossier**, à plat.
 À **chaque** nouveau déploiement, incrémenter la version du cache dans `service-worker.js` :
 
 ```js
-const CACHE = 'modex2-v13';   // -> 'modex2-v14', puis 'modex2-v15', etc.
+const CACHE = 'modex2-v14';   // -> 'modex2-v15', puis 'modex2-v16', etc.
 ```
 
 Sans cela, les téléphones qui ont déjà installé l'app continueront d'afficher l'ancienne version.
@@ -99,14 +99,14 @@ un compte GitHub Enterprise Cloud.
 2. **Descriptif** — texte libre (optionnel), repris sur le devis.
 3. **Grille de chiffrage** — deux cases à cocher **Montage** et **Démontage** en tête
    affichent ou masquent les sections concernées :
-   *Montage* = Montage + Assemblage + Raccordement électrique ; *Démontage* = Démontage.
+   *Montage* = Montage + Assemblage + Raccordement électrique + Raccordement plomberie ; *Démontage* = Désassemblage + Démontage. La section *Déplacement* (kilométrage) apparaît dès qu'une des deux est cochée.
    **Aucune case n'est cochée à l'ouverture** : on choisit à chaque devis.
    Une section masquée est retirée des totaux et des PDF.
    La grille tarifaire s'affiche en tableau ; les sections visibles dépendent des cases cochées.
    Il suffit de saisir le **Nb** en face des prestations concernées ; les prix unitaires
    restent modifiables ligne par ligne. `+ Ligne libre` pour une prestation hors grille.
    **Seules les lignes avec un Nb > 0 partent sur les PDF.**
-4. **Tarif et marge** — tarif jour ou nuit (×1,6), puis marge de ×1,10 à ×1,50.
+4. **Tarif et marge** — tarif jour ou nuit (×1,6), puis marge de ×1,10 à ×2,00.
    **L'app s'ouvre toujours sur « Sans marge »**, y compris après restauration d'un
    chiffrage enregistré : la marge doit être sélectionnée volontairement à chaque devis.
    Le coefficient appliqué est rappelé en rouge à côté de « Marge dégagée ».
@@ -130,7 +130,7 @@ Le récapitulatif affiche le déboursé, la marge dégagée et le total HT du de
   Porte la mention « DOCUMENT INTERNE — NE PAS DIFFUSER AU CLIENT ».
 
 ### Boutons du bas
-`🗑` réinitialiser · `💾` enregistrer le chiffrage en cours sur l'appareil · `📊` PDF interne · `📄` devis client
+`🗑` réinitialiser · `📊` générer le PDF Modex 2.0
 
 ---
 

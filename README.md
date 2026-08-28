@@ -12,7 +12,7 @@ Fonctionne hors ligne, s'installe sur mobile, génère deux PDF.
 | `index.html` | L'application complète (HTML + CSS + JS + logo intégré) |
 | `jspdf.umd.min.js` | Génération des PDF, en local (repli CDN automatique) |
 | `manifest.json` | Déclaration PWA (nom, icônes, couleurs) |
-| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v17` |
+| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v18` |
 | `icon-192.png` | Icône application 192 px |
 | `icon-512.png` | Icône application 512 px |
 
@@ -41,7 +41,7 @@ Les 6 fichiers doivent rester **dans le même dossier**, à plat.
 À **chaque** nouveau déploiement, incrémenter la version du cache dans `service-worker.js` :
 
 ```js
-const CACHE = 'modex2-v17';   // -> 'modex2-v18', puis 'modex2-v19', etc.
+const CACHE = 'modex2-v18';   // -> 'modex2-v19', puis 'modex2-v20', etc.
 ```
 
 Sans cela, les téléphones qui ont déjà installé l'app continueront d'afficher l'ancienne version.
@@ -130,7 +130,7 @@ Le récapitulatif affiche le déboursé, la marge dégagée et le total HT du de
   Porte la mention « DOCUMENT INTERNE — NE PAS DIFFUSER AU CLIENT ».
 
 ### Boutons du bas
-`🗑` réinitialiser · `📊` générer le PDF Modex 2.0
+Réinitialiser (icône corbeille) · Générer le PDF Modex 2.0 (icône document). Interface sans emoji, icônes SVG (style Lucide).
 
 ---
 

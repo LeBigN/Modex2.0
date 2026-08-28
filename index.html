@@ -68,7 +68,9 @@
   .lrow input{padding:9px 8px;border-radius:8px;font-size:14px}
   .lrow .q,.lrow .p{text-align:right}
   .lrow .m{text-align:right;font-weight:700;font-size:13.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .lrow .rm{background:none;border:none;color:#c9c9cf;font-size:19px;cursor:pointer;padding:0;line-height:1}
+  .lrow .rm{background:none;border:none;color:#c0c0c6;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;justify-content:center}
+  .lrow .rm svg{width:16px;height:16px}
+  .lrow .rm:active{color:var(--red)}
   .lrow .dsg{border-color:transparent;background:transparent;font-weight:600;padding-left:2px}
   .lrow .dsg:focus{border-color:var(--red);background:#fff}
   .lrow .dsgtxt{font-weight:600;font-size:13.5px;color:var(--ink);padding:9px 2px;line-height:1.2;
@@ -108,9 +110,10 @@
   footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
     padding:12px;box-shadow:0 -2px 12px rgba(0,0,0,.07)}
   footer .inner{display:flex;gap:10px;max-width:680px;margin:0 auto;width:100%}
-  footer button{border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;padding:15px}
+  footer button{border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;padding:15px;
+    display:flex;align-items:center;justify-content:center;gap:9px}
+  footer button svg{width:20px;height:20px;flex:0 0 auto}
   .b-del{background:#fbe7ea;color:var(--red);flex:0 0 58px}
-  .b-save{background:#f0eef0;color:#555;flex:0 0 52px}
   .b-int{background:var(--red);color:#fff;flex:1;font-size:16px}
   .b-gen{background:var(--red);color:#fff;flex:1.35;font-size:15px}
   footer button:active{transform:scale(.98)}
@@ -208,8 +211,8 @@
 
 <footer>
   <div class="inner">
-    <button class="b-del" onclick="resetAll()" title="Réinitialiser">🗑</button>
-    <button class="b-int" onclick="genInterne()">📊 Générer le PDF Modex 2.0</button>
+    <button class="b-del" onclick="resetAll()" title="Réinitialiser" aria-label="Réinitialiser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>
+    <button class="b-int" onclick="genInterne()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span>Générer le PDF Modex 2.0</span></button>
   </div>
 </footer>
 
@@ -387,7 +390,7 @@ function render(){
       p.oninput=e=>{r.pu=e.target.value; row.classList.toggle('todo',!(parseFloat(e.target.value)||0)); recalc();};
       const m=el('div',{class:'m'}); r._cell=m; m.innerHTML='0,00 €';
       const x=el('button',{class:'rm'});
-      if(r.free){ x.textContent='×'; x.onclick=()=>removeRow(r); } else { x.textContent=''; x.disabled=true; x.style.visibility='hidden'; }
+      if(r.free){ x.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'; x.setAttribute('aria-label','Supprimer la ligne'); x.onclick=()=>removeRow(r); } else { x.innerHTML=''; x.disabled=true; x.style.visibility='hidden'; }
       [d,q,p,m,x].forEach(c=>row.appendChild(c)); wrap.appendChild(row);
     });
   });
@@ -414,15 +417,6 @@ function resetAll(){
   seed(); ['numero','client','soustitre','descriptif','soustraitant','stAutre'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('tarif').value='1'; document.getElementById('marge').value='1';
   render(); try{localStorage.removeItem('modex2');}catch(e){}
-}
-function collect(){return{numero:val('numero'),date:val('date'),client:val('client'),soustitre:val('soustitre'),
-  soustraitant:val('soustraitant'),stAutre:val('stAutre'),descriptif:val('descriptif'),tarif:val('tarif'),marge:val('marge'),
-  chkM:document.getElementById('chkMontage').checked,chkD:document.getElementById('chkDemontage').checked,
-  rows:rows.map(r=>({sec:r.sec,label:r.label,pu:r.pu,nb:r.nb,free:r.free}))};}
-function saveState(){
-  try{ localStorage.setItem('modex2',JSON.stringify(collect()));
-    const b=document.querySelector('.b-save'); const o=b.innerHTML; b.innerHTML='✓ Enregistré'; setTimeout(()=>b.innerHTML=o,1200);
-  }catch(e){ alert("Enregistrement indisponible sur cet appareil."); }
 }
 function loadState(){
   try{ const s=JSON.parse(localStorage.getItem('modex2')||'null'); if(!s)return false;

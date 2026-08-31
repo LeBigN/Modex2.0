@@ -12,7 +12,7 @@ Fonctionne hors ligne, s'installe sur mobile, génère deux PDF.
 | `index.html` | L'application complète (HTML + CSS + JS + logo intégré) |
 | `jspdf.umd.min.js` | Génération des PDF, en local (repli CDN automatique) |
 | `manifest.json` | Déclaration PWA (nom, icônes, couleurs) |
-| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v18` |
+| `service-worker.js` | Cache hors ligne — cache actuel : `modex2-v19` |
 | `icon-192.png` | Icône application 192 px |
 | `icon-512.png` | Icône application 512 px |
 
@@ -41,7 +41,7 @@ Les 6 fichiers doivent rester **dans le même dossier**, à plat.
 À **chaque** nouveau déploiement, incrémenter la version du cache dans `service-worker.js` :
 
 ```js
-const CACHE = 'modex2-v18';   // -> 'modex2-v19', puis 'modex2-v20', etc.
+const CACHE = 'modex2-v19';   // -> 'modex2-v20', puis 'modex2-v21', etc.
 ```
 
 Sans cela, les téléphones qui ont déjà installé l'app continueront d'afficher l'ancienne version.
@@ -104,7 +104,8 @@ un compte GitHub Enterprise Cloud.
    Une section masquée est retirée des totaux et des PDF.
    La grille tarifaire s'affiche en tableau ; les sections visibles dépendent des cases cochées.
    Il suffit de saisir le **Nb** en face des prestations concernées ; les prix unitaires
-   restent modifiables ligne par ligne. `+ Ligne libre` pour une prestation hors grille.
+   **Les prix unitaires (P.U. ST) des lignes de grille sont verrouillés** (lecture seule) ;
+   seules les *lignes libres* permettent de saisir un intitulé et un prix. `+ Ligne libre` pour une prestation hors grille.
    **Seules les lignes avec un Nb > 0 partent sur les PDF.**
 4. **Tarif et marge** — tarif jour ou nuit (×1,6), puis marge de ×1,10 à ×2,00.
    **L'app s'ouvre toujours sur « Sans marge »**, y compris après restauration d'un
